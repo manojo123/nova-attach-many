@@ -1,8 +1,8 @@
 <?php
-
 namespace NovaAttachMany;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Authorizable;
 use NovaAttachMany\Rules\ArrayRules;
@@ -12,7 +12,7 @@ use Laravel\Nova\Fields\ResourceRelationshipGuesser;
 class AttachMany extends Field
 {
     use Authorizable;
-
+ 
     public $height = '300px';
 
     public $fullWidth = false;
@@ -26,6 +26,15 @@ class AttachMany extends Field
     public $showOnIndex = false;
 
     public $showOnDetail = false;
+
+    /**
+     * The callback that should be used to resolve the pivot fields.
+     *
+     * @var callable
+     */
+    public $pivotFields;
+
+    public $searchableFields;
 
     public $component = 'nova-attach-many';
 
@@ -41,12 +50,30 @@ class AttachMany extends Field
         $this->resourceName = $resource::uriKey();
         $this->manyToManyRelationship = $this->attribute;
 
-        $this->fillUsing(function($request, $model, $attribute, $requestAttribute) use($resource) {
-            if(is_subclass_of($model, 'Illuminate\Database\Eloquent\Model')) {
-                $model::saved(function($model) use($attribute, $request) {
-                    $model->$attribute()->sync(
-                        json_decode($request->$attribute, true)
-                    );
+        $this->pivotFields = function () {
+            return '';
+        };
+
+        $this->searchableFields = function () {
+            return '';
+        };
+
+        $this->fillUsing(function ($request, $model, $attribute, $requestAttribute) use ($resource) {
+            if (is_subclass_of($model, 'Illuminate\Database\Eloquent\Model')) {
+                $model::saved(function ($model) use ($attribute, $request, $requestAttribute) {
+                    $response = json_decode($request->$attribute, true);
+
+                    $sync = [];
+                    foreach($response as $element){
+                        $pivots = [];
+                        foreach ($element["pivots"] as $pivot) {
+                            $pivots[Str::lower($pivot["display"])] = $pivot["value"];
+                        }
+
+                        $sync[$element["value"]] = $pivots;
+                    }
+
+                    $model->$attribute()->sync($sync, true);
                 });
 
                 unset($request->$attribute);
@@ -70,17 +97,19 @@ class AttachMany extends Field
             'fullWidth' => $this->fullWidth,
             'showCounts' => $this->showCounts,
             'showPreview' => $this->showPreview,
-            'showToolbar' => $this->showToolbar
+            'showToolbar' => $this->showToolbar,
+            'pivotFields' => $this->pivotFields,
+            'searchableFields' => $this->searchableFields
         ]);
     }
 
     public function authorize(Request $request)
     {
-        if(! $this->resourceClass::authorizable()) {
+        if (! $this->resourceClass::authorizable()) {
             return true;
         }
 
-        if(! isset($request->resource)) {
+        if (! isset($request->resource)) {
             return false;
         }
 
@@ -123,4 +152,19 @@ class AttachMany extends Field
 
         return $this;
     }
+
+    public function pivotFields($pivotFields)
+    {
+        $this->pivotFields = is_array($pivotFields) ? $pivotFields : [$pivotFields];
+
+        return $this;
+    }
+
+    public function searchableFields($searchableFields)
+    {
+        $this->searchableFields = is_array($searchableFields) ? $searchableFields : [$searchableFields];
+
+        return $this;
+    }
+
 }

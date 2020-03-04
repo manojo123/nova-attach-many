@@ -4,6 +4,7 @@ namespace NovaAttachMany\Http\Controllers;
 
 use Laravel\Nova\Resource;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AttachController extends Controller
@@ -11,7 +12,7 @@ class AttachController extends Controller
     public function create(NovaRequest $request, $parent, $relationship)
     {
         return [
-            'available' => $this->getAvailableResources($request, $relationship),
+            'available' => $this->getAvailableResources($request, $relationship, $parent),
         ];
     }
 
@@ -19,11 +20,11 @@ class AttachController extends Controller
     {
         return [
             'selected' => $request->findResourceOrFail()->model()->{$relationship}->pluck('id'),
-            'available' => $this->getAvailableResources($request, $relationship),
+            'available' => $this->getAvailableResources($request, $relationship, $parent, $parentId),
         ];
     }
 
-    public function getAvailableResources($request, $relationship)
+    public function getAvailableResources($request, $relationship, $parent, $parentId=false)
     {
         $resourceClass = $request->newResource();
 
@@ -39,10 +40,36 @@ class AttachController extends Controller
             ->mapInto($field->resourceClass)
             ->filter(function ($resource) use ($request, $field) {
                 return $request->newResource()->authorizedToAttach($request, $resource->resource);
-            })->map(function($resource) {
+            })->map(function($resource) use ($request, $parent, $parentId) {
+                $pivotFields = [];
+                if($request->pivots){
+                    foreach (explode(',', $request->pivots) as $pivot) {
+                        $pivotValue = null;
+                        if($parentId && $resource->$parent()->find($parentId)){
+                            $lower_pivot = Str::lower($pivot);
+
+                            $pivotValue = $resource->$parent()->find($parentId)->pivot->$lower_pivot;
+                        }
+
+                        $pivotFields[] = [
+                            'display' => $pivot,
+                            'value' => ($pivotValue ?: 0)
+                        ];
+                    }
+                }
+
+                $searchableContent = $resource->title();
+                if($request->searchableFields){
+                    foreach (explode(',', $request->searchableFields) as $searchableField) {
+                        $searchableContent .= $resource->$searchableField;
+                    }
+                }
+
                 return [
                     'display' => $resource->title(),
                     'value' => $resource->getKey(),
+                    'pivots' => $pivotFields,
+                    'searchableContent' => $searchableContent
                 ];
             })->sortBy('display')->values();
     }

@@ -1,4 +1,11 @@
+## Whats New? 
+
+- You can use attachMany field with pivot Fields.
+- You can search elements by custom fields instead only name
+
 # Nova Attach Many
+
+##### Forked from Dillingham's REPO. I will be so grateful if someone can use this branch and finish the TODO list.
 
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many)
 [![Total Downloads](https://img.shields.io/packagist/dt/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many) [![Twitter Follow](https://img.shields.io/twitter/follow/dillinghammm?color=%231da1f1&label=Twitter&logo=%231da1f1&logoColor=%231da1f1&style=flat-square)](https://twitter.com/dillinghammm)
@@ -10,7 +17,7 @@ Belongs To Many create & edit form UI for Nova. Enables attaching relationships 
 ### Installation
 
 ```bash
-composer require dillingham/nova-attach-many
+composer require manojo123/nova-attach-many
 ```
 
 ### Usage
@@ -43,6 +50,8 @@ You can set min, max, size or custom rule objects
 Here are a few customization options
 
 - `->showCounts()` Shows "selected/total"
+- `->pivotFields(['qty'])` Adds pivot fields to be attached inline
+- `->searchableFields(['bar_code'])` Search box can find by name plus all fields defined in this method
 - `->showPreview()` Shows only selected
 - `->hideToolbar()` Removes search & select all
 - `->height('500px')` Set custom height
@@ -65,7 +74,5 @@ This field also respects policies: ie Role / Permission
 ### TODO
 
 [] Add pagination for large amount of resources
-
-### Thanks
-
-[dkulyk](https://github.com/dkulyk) helped with authorization
+[] Pass Nova Fields instead array of strings in pivotFields with full field framework customization. (Rules, Types, etc)
+[] Refactorate code and perform some unit tests.
