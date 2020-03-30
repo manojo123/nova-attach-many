@@ -64,16 +64,19 @@ class AttachMany extends Field
                     $response = json_decode($request->$attribute, true);
 
                     $sync = [];
-                    foreach($response as $element){
-                        $pivots = [];
-                        foreach ($element["pivots"] as $pivot) {
-                            $pivots[Str::lower($pivot["display"])] = $pivot["value"];
+                    if(is_array($response)){
+                        foreach($response as $element){
+                            $pivots = [];
+                            foreach ($element["pivots"] as $pivot) {
+                                $pivots[Str::lower($pivot["display"])] = $pivot["value"];
+                            }
+
+                            $sync[$element["value"]] = $pivots;
                         }
 
-                        $sync[$element["value"]] = $pivots;
+                        $model->$attribute()->sync($sync, true);
                     }
-
-                    $model->$attribute()->sync($sync, true);
+                    
                 });
 
                 unset($request->$attribute);
