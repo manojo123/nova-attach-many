@@ -1,6 +1,6 @@
 <?php
 
-namespace NovaAttachMany\Providers;
+namespace NovaAttachPivot\Providers;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
@@ -16,12 +16,12 @@ class FieldServiceProvider extends ServiceProvider
     public function boot()
     {
         Nova::serving(function (ServingNova $event) {
-            Nova::script('nova-attach-many', __DIR__.'/../../dist/js/field.js');
+            Nova::script('nova-attach-pivot', __DIR__.'/../../dist/js/field.js');
         });
 
         $this->app->booted(function () {
             \Route::middleware(['nova'])
-                ->prefix('nova-vendor/nova-attach-many')
+                ->prefix('nova-vendor/nova-attach-pivot')
                 ->group(__DIR__.'/../../routes/api.php');
         });
     }

@@ -138,7 +138,7 @@ export default {
         },
 
         setInitialValue() {
-            let baseUrl = '/nova-vendor/nova-attach-many/';
+            let baseUrl = '/nova-vendor/nova-attach-pivot/';
 
             if(this.resourceId) {
                 Nova.request(baseUrl + this.resourceName + '/' + this.resourceId + '/attachable/' + this.field.attribute + '?' + this.setQueryString()).then((data) => {

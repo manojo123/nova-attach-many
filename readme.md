@@ -1,35 +1,35 @@
 ## Whats New? 
 
-- You can use attachMany field with pivot Fields.
+- You can use attachPivot field with pivot Fields.
 - You can search elements by custom fields instead only name
 
-# Nova Attach Many
+# Nova Attach Pivot
 
-##### Forked from Dillingham's REPO. I will be so grateful if someone can use this branch and finish the TODO list.
+##### Forked from Dillingham's REPO. Changed the name to avoid dependencies conflicts. I will be so grateful if someone can use this branch and finish the TODO list.
 
 [![Latest Version on Github](https://img.shields.io/github/release/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many)
 [![Total Downloads](https://img.shields.io/packagist/dt/dillingham/nova-attach-many.svg?style=flat-square)](https://packagist.org/packages/dillingham/nova-attach-many) [![Twitter Follow](https://img.shields.io/twitter/follow/dillinghammm?color=%231da1f1&label=Twitter&logo=%231da1f1&logoColor=%231da1f1&style=flat-square)](https://twitter.com/dillinghammm)
 
 Belongs To Many create & edit form UI for Nova. Enables attaching relationships easily and includes validation.
 
-![attach-many](https://user-images.githubusercontent.com/29180903/52160651-be7fd580-2687-11e9-9ece-27332b3ce6bf.png)
+![attach-pivot](https://user-images.githubusercontent.com/29180903/52160651-be7fd580-2687-11e9-9ece-27332b3ce6bf.png)
 
 ### Installation
 
 ```bash
-composer require manojo123/nova-attach-many
+composer require manojo123/nova-attach-pivot
 ```
 
 ### Usage
 
 ```php
-use NovaAttachMany\AttachMany;
+use NovaAttachPivot\AttachPivot;
 ```
 ```php
 public function fields(Request $request)
 {
     return [
-        AttachMany::make('Permissions'),
+        AttachPivot::make('Permissions'),
     ];
 }
 ```

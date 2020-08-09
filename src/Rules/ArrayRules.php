@@ -1,6 +1,6 @@
 <?php
 
-namespace NovaAttachMany\Rules;
+namespace NovaAttachPivot\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 

@@ -1,15 +1,15 @@
 <?php
-namespace NovaAttachMany;
+namespace NovaAttachPivot;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Authorizable;
-use NovaAttachMany\Rules\ArrayRules;
+use NovaAttachPivot\Rules\ArrayRules;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Fields\ResourceRelationshipGuesser;
 
-class AttachMany extends Field
+class AttachPivot extends Field
 {
     use Authorizable;
  
@@ -36,7 +36,7 @@ class AttachMany extends Field
 
     public $searchableFields;
 
-    public $component = 'nova-attach-many';
+    public $component = 'nova-attach-pivot';
 
     public function __construct($name, $attribute = null, $resource = null)
     {

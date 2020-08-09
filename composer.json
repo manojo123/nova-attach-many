@@ -1,6 +1,6 @@
 {
-    "name": "manojo123/nova-attach-many",
-    "description": "Attach Many Nova field",
+    "name": "manojo123/nova-attach-pivot",
+    "description": "Attach Pivot Nova field",
     "keywords": [
         "laravel",
         "nova"
@@ -11,13 +11,13 @@
     },
     "autoload": {
         "psr-4": {
-            "NovaAttachMany\\": "src/"
+            "NovaAttachPivot\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "NovaAttachMany\\Providers\\FieldServiceProvider"
+                "NovaAttachPivot\\Providers\\FieldServiceProvider"
             ]
         }
     },

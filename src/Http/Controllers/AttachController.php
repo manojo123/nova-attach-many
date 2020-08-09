@@ -1,6 +1,6 @@
 <?php
 
-namespace NovaAttachMany\Http\Controllers;
+namespace NovaAttachPivot\Http\Controllers;
 
 use Laravel\Nova\Resource;
 use Illuminate\Routing\Controller;
@@ -30,7 +30,7 @@ class AttachController extends Controller
 
         $field = $resourceClass
             ->availableFields($request)
-            ->where('component', 'nova-attach-many')
+            ->where('component', 'nova-attach-pivot')
             ->where('attribute', $relationship)
             ->first();
 
