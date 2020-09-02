@@ -31,7 +31,7 @@
                                         <th 
                                         v-for="pivot in resources[0].pivots" 
                                         class="w-32 py-2 px-6 bg-grey-lightest font-bold uppercase text-sm text-grey-dark border-b border-grey-light text-80 border-60">
-                                            {{ pivot.display }}
+                                            {{ pivot.label }}
                                         </th>
                                     </tr>
                                 </thead>

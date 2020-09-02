@@ -52,7 +52,8 @@ class AttachController extends Controller
                         }
 
                         $pivotFields[] = [
-                            'display' => __(Str::title(Str::of($pivot)->replace(['_', '-', '.'], ' '))),
+                            'display' => $pivot,
+                            'label' => $resource->title(),
                             'value' => ($pivotValue ?: 0)
                         ];
                     }
