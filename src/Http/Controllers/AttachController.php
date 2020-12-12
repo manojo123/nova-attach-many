@@ -2,7 +2,6 @@
 
 namespace NovaAttachPivot\Http\Controllers;
 
-use Laravel\Nova\Resource;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -26,6 +25,8 @@ class AttachController extends Controller
 
     public function getAvailableResources($request, $relationship, $parent, $parentId=false)
     {
+        $parent = str_replace('-', '_', $parent);
+
         $resourceClass = $request->newResource();
 
         $field = $resourceClass
@@ -45,6 +46,7 @@ class AttachController extends Controller
                 if($request->pivots){
                     foreach (explode(',', $request->pivots) as $pivot) {
                         $pivotValue = null;
+                        
                         if($parentId && $resource->$parent()->find($parentId)){
                             $lower_pivot = Str::lower($pivot);
 
