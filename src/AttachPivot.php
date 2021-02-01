@@ -67,14 +67,20 @@ class AttachPivot extends Field
                     if(is_array($response)){
                         foreach($response as $element){
                             $pivots = [];
+
                             foreach ($element["pivots"] as $pivot) {
-                                $pivots[Str::lower($pivot["display"])] = $pivot["value"];
+                                $pivots[Str::lower($pivot["display"])] = $pivot["value"] ?: null;
                             }
 
-                            $sync[$element["value"]] = $pivots;
+                            if (!empty($pivots)) {
+                                $sync[$element["value"]] = $pivots;
+                            }
+
                         }
 
-                        $model->$attribute()->sync($sync, true);
+                        if (!empty($sync)) {
+                            $model->$attribute()->sync($sync, true);
+                        }
                     }
                     
                 });
